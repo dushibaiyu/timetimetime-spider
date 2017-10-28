@@ -18,14 +18,16 @@ fun hanleHomePage(data : String)
 
 fun saveUrl(url : String, title : String)
 {
-    println("url: $url")
-    println("title: $title")
-    if(url.startsWith("http://www.timetimetime.net/yuedu/"))
+    if(url.indexOf("/yuedu/") > 0)
     {
-
+        println("tye: 阅读")
+        println("url: $url")
+        println("title: $title")
     }
 
-    if(url.startsWith("http://www.timetimetime.net/yuedu/")){
-
+    if(url.indexOf("/yuanchuang/") > 0){
+        println("tye: 原创")
+        println("url: $url")
+        println("title: $title")
     }
 }
