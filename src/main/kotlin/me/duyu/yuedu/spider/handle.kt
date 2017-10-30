@@ -72,27 +72,12 @@ fun handleArticleData(manger : Manger, body : HttpResponse<Buffer>, article : Ar
 fun saveToFile(manger: Manger, buffer: Buffer, article : ArticleUrlInfo, imgUrl : String)
 {
     val fsys = manger.vertx.fileSystem()
-    val spath = "data/${article.getFolderName()}"
-    val art = "$spath/${article.title}.md";
+    val fname = "data/${article.title}.${article.getUrlID()}.md"
     val imageName = getPathName(imgUrl);
-    val img = "$spath/$imageName";
-    fsys.exists(spath){it->if(it.succeeded()){
-        if(it.result()){
-            saveToFile(manger,fsys,buffer, art, img ,imgUrl)
-        } else {
-            fsys.mkdir(spath){
-                if(it.succeeded())
-                    saveToFile(manger,fsys,buffer, art, img ,imgUrl)
-            }
-        }
-    }}
-}
-
-fun saveToFile(manger: Manger,fsys: FileSystem, buffer: Buffer, fname : String,iname : String , imgUrl : String)
-{
+    val img = "data/$imageName";
     fsys.writeFile(fname,buffer){_->}
     if(imgUrl.isNotEmpty()) {
-        manger.getData(imgUrl) { _, res -> fsys.writeFile(iname, res.bodyAsBuffer()) { _ -> } }
+        manger.getData(imgUrl) { _, res -> fsys.writeFile(img, res.bodyAsBuffer()) { _ -> } }
     }
 }
 
@@ -101,9 +86,7 @@ fun getPathName(url : String) : String
     return url.substringAfterLast('/');
 }
 
-fun ArticleUrlInfo.getFolderName() : String
+fun ArticleUrlInfo.getUrlID() : String
 {
-    val uri = URI(this.url);
-    val path = uri.path;
-    return path.replace("/","_")
+    return this.url.substringAfterLast('/').substringBeforeLast('.');
 }
