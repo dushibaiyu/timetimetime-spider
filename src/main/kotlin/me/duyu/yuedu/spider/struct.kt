@@ -56,6 +56,7 @@ fun Manger.handleList(mustCall : Boolean = false)
     when (url){
         null ->{ if(this.isEndPage()) this.vertx.close()}
         else ->{ if(mustCall || (!this.startHandleList)){
+            //println(getPathName(url.url))
             this.startHandleList = true;
             this.vertx.setTimer(200){
                 _->this.getData(url.url,{manger,rep -> handleArticleData(manger, rep,url)})

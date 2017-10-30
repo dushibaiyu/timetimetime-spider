@@ -4,3 +4,4 @@ build
 .vertx
 .gradle
 .idea
+data
