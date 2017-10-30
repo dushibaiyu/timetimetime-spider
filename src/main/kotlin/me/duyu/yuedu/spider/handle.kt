@@ -51,16 +51,18 @@ fun handleArticleData(manger : Manger, body : HttpResponse<Buffer>, article : Ar
 
     val bufer = Buffer.buffer("# ");
     bufer.appendString(title?.text()?:"");
-    bufer.appendString("\n------------------------\n* ");
-    bufer.appendString(time?.text()?:"");
-    bufer.appendString("\n* url:");
-    bufer.appendString(article.url);
-    bufer.appendString("\n* ");
-    bufer.appendString(article.title);
-    bufer.appendString("\n\n");
+    bufer.appendString("\n------------------------\n\n");
 
     val remark = Remark(Options.github())
     bufer.appendString(remark.convert(abody?.html()))
+
+    bufer.appendString("\n\n-----------------------\n* 发布信息：");
+    bufer.appendString(time?.text()?:"");
+    bufer.appendString("\n* 原文地址: ");
+    bufer.appendString(article.url);
+    bufer.appendString("\n* 原文标题： ");
+    bufer.appendString(article.title);
+    bufer.appendString("\n\n");
 
     saveToFile(manger, bufer, article,imgUrl)
 
