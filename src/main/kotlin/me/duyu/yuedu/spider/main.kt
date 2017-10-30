@@ -1,3 +1,4 @@
+@file:JvmName("main")
 package me.duyu.yuedu.spider
 
 import io.vertx.core.Vertx;

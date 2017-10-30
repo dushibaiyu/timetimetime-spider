@@ -52,7 +52,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'me.duyu.tools.main'
+                'Main-Class': 'me.duyu.yuedu.spider.main'
     }
 }
 
