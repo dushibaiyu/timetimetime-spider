@@ -22,7 +22,7 @@ data class ArticleUrlInfo(val title : String, val url : String, val type : Artic
 class Manger(val vertx : Vertx, val options : WebClientOptions, val loger : Logger = LoggerFactory.getLogger("manger"))
 {
     private val _urlList = mutableListOf<ArticleUrlInfo>()
-    private var _currtUrl : Int = 1;
+    private var _currtUrl : Int = 0;
     private val startUrl: String = "http://www.timetimetime.net/";
     private val maxPage : Int = 216;
 
@@ -42,6 +42,7 @@ class Manger(val vertx : Vertx, val options : WebClientOptions, val loger : Logg
     fun isEndPage() : Boolean = _currtUrl > maxPage
 
     fun getPageUrl() : String {
+        _currtUrl ++
         when(_currtUrl) {
             in 2..maxPage ->  return "${startUrl}page_${_currtUrl.toString()}.html"
             else -> return startUrl
