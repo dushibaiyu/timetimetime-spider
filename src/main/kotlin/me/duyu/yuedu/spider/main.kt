@@ -7,7 +7,7 @@ import io.vertx.ext.web.client.WebClientOptions;
 fun main(args : Array<String>)
 {
     val options = VertxOptions();
-    options.workerPoolSize = 0;
+    options.workerPoolSize = 1;
     options.eventLoopPoolSize = 1;
     val vertx = Vertx.vertx(options);
     val webOptions = WebClientOptions().setUserAgentEnabled(true)
@@ -15,5 +15,6 @@ fun main(args : Array<String>)
             .setFollowRedirects(true).setTrustAll(true).setKeepAlive(false)
     val manger = Manger(vertx, webOptions);
     val url = manger.getPageUrl();
+    println(url);
     manger.getData(url, ::handlePageList);
 }

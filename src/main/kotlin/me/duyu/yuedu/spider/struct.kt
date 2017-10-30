@@ -6,6 +6,8 @@ import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer
 import io.vertx.ext.web.client.WebClient
+import io.vertx.core.logging.Logger
+import io.vertx.core.logging.LoggerFactory
 import kotlin.collections.mutableListOf;
 
 typealias Handler = (Manger,HttpResponse<Buffer>) -> Unit
@@ -17,7 +19,7 @@ enum class ArticleType{
 
 data class ArticleUrlInfo(val title : String, val url : String, val type : ArticleType)
 
-class Manger(val vertx : Vertx, val options : WebClientOptions)
+class Manger(val vertx : Vertx, val options : WebClientOptions, val loger : Logger = LoggerFactory.getLogger("manger"))
 {
     private val _urlList = mutableListOf<ArticleUrlInfo>()
     private var _currtUrl : Int = 1;
@@ -55,7 +57,9 @@ fun Manger.handleList(mustCall : Boolean = false)
         null ->{ if(this.isEndPage()) this.vertx.close()}
         else ->{ if(mustCall || (!this.startHandleList)){
             this.startHandleList = true;
-            this.vertx.setTimer(200,{_->this.getData(url.url,::handleArticleData)})
+            this.vertx.setTimer(200){
+                _->this.getData(url.url,{manger,rep -> handleArticleData(manger, rep,url)})
+            }
         }}
     }
 }
@@ -63,6 +67,8 @@ fun Manger.handleList(mustCall : Boolean = false)
 fun Manger.getData(url : String, handle : Handler){
     val client = WebClient.create(this.vertx,this.options)
     val request = client.getAbs(url);
+    this.loger.trace("get the url {}", url);
+    println("get the url : $url")
     request.setHeaders()
     request.send{
         if(it.succeeded()){
